@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="shop" extends="json-default">
+    	<global-results>
+    		<result name="ulogin">/ulogin.jsp</result>
+    		<result name="index">/index.jsp</result>
+    		<result name="aindex">/WEB-INF/public/index.jsp</result>
+    	</global-results>
+        <action name="categoryAction_*" method="{1}" class="categoryAction">
+            <result name="SUCCESS">success.jsp</result>
+            <result name="JsonMap" type="json">
+            	<param name="root">jsonMap</param>
+            	<param name="excludeProperties">
+            		\[\d+\]\.account.pass,
+            		\[\d+\]\.account.name
+            	</param>
+            </result>
+            <result name="stream" type="stream">
+            	<param name="inputStream">inputStream</param>
+            </result>
+            <result name="jsonList" type="json">
+				<param name="root">jsonList</param>
+				<param name="includeProperties">
+					<!-- 返回的是 list集合    [{account对象},{...},{.....}] -->
+					\[\d+\]\.id,\[\d+\]\.name
+				</param>
+			</result>
+        </action>
+		<action name="accountAction_*" method="{1}" class="accountAction">
+			<result name="jsonList" type="json">
+				<param name="root">jsonList</param>
+				<param name="excludeProperties">
+					<!-- 返回的是 list集合    [{account对象},{...},{.....}] -->
+					\[\d+\]\.pass
+				</param>
+			</result>
+		</action>
+		<action name="send_*_*" method="execute" class="sendAction">
+			<result name="send">/WEB-INF/{1}/{2}.jsp</result>
+		</action>
+		<action name="productAction_*" method="{1}" class="productAction">
+			<result name="jsonMap" type="json">
+				<param name="root">jsonMap</param>
+				<param name="excludeProperties">
+					<!-- 返回的是 list集合    [{account对象},{...},{.....}] -->
+					rows\[\d+\]\.category.account
+				</param>
+			</result>
+			<result name="stream" type="stream">
+            	<param name="inputStream">inputStream</param>
+            </result>
+            <result name="detail">detail.jsp</result>
+		</action>
+		<action name="sorderAction_*" method="{1}" class="sorderAction">
+			<result name="stream" type="stream">
+				<param name="inputStream">inputStream</param>
+			</result>
+			<result name="addSorder" type="redirect">
+					showCar.jsp
+			</result>
+			<result name="json" type="json"></result>
+		</action>
+		<action name="userAction_*" method="{1}" class="userAction">
+			<result name="login">${#session.nextUrl}</result>
+		</action>
+		<action name="forderAction_*" method="{1}" class="forderAction">
+			<result name="bank">/user/bank.jsp</result>
+		</action>
+		<action name="payAction_*" method="{1}" class="payAction">
+			<result name="goPay">/user/pay.jsp</result>
+			<result name="result">/user/result.jsp</result>
+		</action>
+	</package>
+</struts>
